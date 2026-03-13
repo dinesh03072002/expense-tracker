@@ -2,44 +2,45 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const sequelize = require('./config/database');
-const { User, Category, Expense, Budget } = require('./models');
+require('./models');
 
 const app = express();
 
+// 🔥 SUPER PERMISSIVE CORS FOR TESTING - Replace your entire CORS config with this
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://expense-tracking2.vercel.app');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
+// Also keep the cors package for good measure
 app.use(cors({
-  origin: ['https://expense-tracking2.vercel.app', 'http://localhost:3000'],
+  origin: 'https://expense-tracking2.vercel.app',
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  optionsSuccessStatus: 200
 }));
-
-app.options('*', cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Test routes
+// Test route to verify backend is working
 app.get('/', (req, res) => {
   res.json({ 
-    status: 'API is running',
-    environment: process.env.NODE_ENV,
-    timestamp: new Date().toISOString()
+    message: 'Backend is running!',
+    frontend: 'https://expense-tracking2.vercel.app',
+    cors: 'enabled'
   });
 });
 
 app.get('/api/test', (req, res) => {
-  res.json({ 
-    message: 'Backend test endpoint working!',
-    database: process.env.DB_NAME ? 'Configured' : 'Missing',
-    jwt: process.env.JWT_SECRET ? 'Configured' : 'Missing'
-  });
-});
-
-// Debug middleware to log all requests
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-  next();
+  res.json({ status: 'ok', message: 'Test endpoint working' });
 });
 
 // Your routes
@@ -49,33 +50,19 @@ app.use('/api/expenses', require('./routes/expenseRoutes'));
 app.use('/api/budget', require('./routes/budgetRoutes'));
 app.use('/api/insights', require('./routes/insightRoutes'));
 
-// 404 handler for unmatched routes
-app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found', path: req.url });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Server error:', err);
-  res.status(500).json({ error: 'Internal server error' });
-});
-
 const PORT = process.env.PORT || 5000;
 
-// Database connection 
 sequelize.authenticate()
   .then(() => {
-    console.log(' Database connected successfully');
+    console.log('✅ Database connected');
     return sequelize.sync({ alter: true });
   })
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-      console.log(`Environment: ${process.env.NODE_ENV}`);
-      console.log(`Frontend URL: ${process.env.FRONTEND_URL}`);
+      console.log(`✅ Server running on port ${PORT}`);
+      console.log(`🔗 Accepting requests from: https://expense-tracking2.vercel.app`);
     });
   })
   .catch(err => {
-    console.error('Unable to connect to database:', err);
-    process.exit(1); 
+    console.error('❌ Database connection failed:', err);
   });

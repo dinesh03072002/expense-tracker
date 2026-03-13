@@ -50,6 +50,15 @@ app.use('/api/expenses', require('./routes/expenseRoutes'));
 app.use('/api/budget', require('./routes/budgetRoutes'));
 app.use('/api/insights', require('./routes/insightRoutes'));
 
+console.log('📋 Registered Routes:');
+app._router.stack.forEach(function(r){
+  if (r.route && r.route.path){
+    console.log(`  ${Object.keys(r.route.methods)} ${r.route.path}`);
+  } else if (r.name === 'router' && r.handle.stack) {
+    console.log(`  Router: ${r.regexp}`);
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 
 sequelize.authenticate()

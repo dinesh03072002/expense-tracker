@@ -3,33 +3,147 @@
 @tailwind utilities;
 
 @layer base {
+  /* Better mobile defaults */
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-gray-50 text-gray-900 m-0 p-0;
+    overflow-x: hidden;
+  }
+
+  /* Better touch targets */
+  button, a, [role="button"] {
+    @apply cursor-pointer;
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prevent zoom on input focus in iOS */
+  input, select, textarea {
+    font-size: 16px !important;
   }
 }
 
 @layer components {
-  .btn-primary {
-    @apply bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition duration-200 font-medium;
+  /* Container */
+  .container-mobile {
+    @apply w-full px-4 mx-auto;
+    max-width: 100%;
   }
   
-  .btn-danger {
-    @apply bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-200 font-medium;
+  @media (min-width: 640px) {
+    .container-mobile {
+      @apply px-6;
+      max-width: 640px;
+    }
   }
   
-  .btn-secondary {
-    @apply bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-200 font-medium;
+  @media (min-width: 768px) {
+    .container-mobile {
+      max-width: 768px;
+    }
   }
   
-  .input-field {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  @media (min-width: 1024px) {
+    .container-mobile {
+      @apply px-8;
+      max-width: 1024px;
+    }
   }
   
-  .card {
-    @apply bg-white rounded-xl shadow-md p-6;
+  @media (min-width: 1280px) {
+    .container-mobile {
+      max-width: 1280px;
+    }
+  }
+
+  /* Cards */
+  .mobile-card {
+    @apply bg-white rounded-xl shadow-sm p-4 hover:shadow-md transition;
   }
   
-  .form-label {
-    @apply block text-sm font-medium text-gray-700 mb-1;
+  @media (min-width: 640px) {
+    .mobile-card {
+      @apply p-6;
+    }
+  }
+
+  /* Grid for cards */
+  .card-grid {
+    @apply grid grid-cols-1 gap-4;
+  }
+  
+  @media (min-width: 640px) {
+    .card-grid {
+      @apply grid-cols-2 gap-6;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .card-grid {
+      @apply grid-cols-3;
+    }
+  }
+
+  /* Headings */
+  .heading-1 {
+    @apply text-2xl font-bold;
+  }
+  
+  @media (min-width: 640px) {
+    .heading-1 {
+      @apply text-3xl;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .heading-1 {
+      @apply text-4xl;
+    }
+  }
+
+  .heading-2 {
+    @apply text-xl font-semibold;
+  }
+  
+  @media (min-width: 640px) {
+    .heading-2 {
+      @apply text-2xl;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .heading-2 {
+      @apply text-3xl;
+    }
+  }
+
+  /* Hide on mobile, show on desktop */
+  .desktop-only {
+    @apply hidden lg:block;
+  }
+
+  /* Show on mobile, hide on desktop */
+  .mobile-only {
+    @apply block lg:hidden;
+  }
+
+  /* Responsive table wrapper */
+  .table-responsive {
+    @apply w-full overflow-x-auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Bottom navigation for mobile */
+  .mobile-bottom-nav {
+    @apply fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 lg:hidden;
+  }
+
+  /* Main content padding for mobile (to account for bottom nav) */
+  .main-content {
+    @apply pb-20 lg:pb-8;
   }
 }

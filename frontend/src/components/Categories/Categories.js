@@ -53,20 +53,20 @@ const Categories = () => {
   };
 
   return (
-    <div className="p-8">
+    <div className="px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8 pb-20 lg:pb-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-800">Categories</h1>
-        <p className="text-gray-500">Manage your expense categories</p>
+      <div className="mb-4 sm:mb-6 lg:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Categories</h1>
+        <p className="text-sm sm:text-base text-gray-500 mt-1">Manage your expense categories</p>
       </div>
 
       {/* Add Category Form */}
-      <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-4">Add New Category</h2>
-        <form onSubmit={handleAddCategory} className="flex gap-4">
+      <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 mb-4 sm:mb-6">
+        <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Add New Category</h2>
+        <form onSubmit={handleAddCategory} className="flex flex-col sm:flex-row gap-3">
           <input
             type="text"
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full sm:flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
             placeholder="Enter category name"
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
@@ -74,9 +74,9 @@ const Categories = () => {
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50"
+            className="w-full sm:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2 disabled:opacity-50 text-base font-medium min-h-[48px]"
           >
-            <FiPlus /> Add
+            <FiPlus className="h-5 w-5" /> Add
           </button>
         </form>
         {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
@@ -84,38 +84,46 @@ const Categories = () => {
 
       {/* Delete Error Message */}
       {deleteError && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 flex items-center gap-2">
-          <FiAlertCircle className="text-red-500" />
-          <p className="text-red-700">{deleteError}</p>
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 sm:mb-6 rounded-lg flex items-start gap-3">
+          <FiAlertCircle className="text-red-500 h-5 w-5 flex-shrink-0 mt-0.5" />
+          <p className="text-red-700 text-sm sm:text-base flex-1">{deleteError}</p>
         </div>
       )}
 
       {/* Categories Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {categories.map(cat => (
-          <div key={cat.id} className="bg-white rounded-xl shadow-sm p-4 hover:shadow-md transition group">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-blue-100">
-                  <FiTag className="h-5 w-5 text-blue-600" />
+      {categories.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+          {categories.map(cat => (
+            <div 
+              key={cat.id} 
+              className="bg-white rounded-xl shadow-sm hover:shadow-md transition group relative"
+            >
+              <div className="p-4 sm:p-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className="p-2 rounded-lg bg-blue-100 flex-shrink-0">
+                      <FiTag className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <h3 className="font-medium text-gray-900 truncate text-sm sm:text-base">
+                      {cat.name}
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => handleDeleteCategory(cat.id, cat.name)}
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition ml-2 flex-shrink-0"
+                    title="Delete category"
+                  >
+                    <FiTrash2 className="h-5 w-5" />
+                  </button>
                 </div>
-                <h3 className="font-medium text-gray-900">{cat.name}</h3>
               </div>
-              <button
-                onClick={() => handleDeleteCategory(cat.id, cat.name)}
-                className="text-red-500 hover:text-red-700 p-2 opacity-0 group-hover:opacity-100 transition"
-                title="Delete category"
-              >
-                <FiTrash2 />
-              </button>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {categories.length === 0 && (
-        <div className="text-center py-12 bg-white rounded-xl">
-          <p className="text-gray-500">No categories found. Add your first category!</p>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-12 sm:py-16 bg-white rounded-xl">
+          <FiTag className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+          <p className="text-gray-500 text-sm sm:text-base">No categories found. Add your first category!</p>
         </div>
       )}
     </div>

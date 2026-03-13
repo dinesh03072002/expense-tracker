@@ -7,8 +7,6 @@ import {
   FiTag,
   FiLogOut,
   FiDollarSign,
-  FiPieChart,
-  FiSettings,
   FiUser
 } from 'react-icons/fi';
 
@@ -28,11 +26,11 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-64 bg-white shadow-lg flex flex-col">
+    <div className="h-full bg-white shadow-lg flex flex-col">
       {/* Logo */}
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center space-x-2">
-          
+          <FiDollarSign className="h-8 w-8 text-blue-600" />
           <span className="text-xl font-bold text-gray-800">ExpenseTracker</span>
         </div>
       </div>
@@ -43,9 +41,9 @@ const Sidebar = () => {
           <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
             <FiUser className="h-5 w-5 text-blue-600" />
           </div>
-          <div>
-            <p className="text-sm font-medium text-gray-800">{user?.name}</p>
-            <p className="text-xs text-gray-500">{user?.email}</p>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-medium text-gray-800 truncate">{user?.name}</p>
+            <p className="text-xs text-gray-500 truncate">{user?.email}</p>
           </div>
         </div>
       </div>
@@ -73,7 +71,7 @@ const Sidebar = () => {
         </ul>
       </nav>
 
-      {/* Bottom Section */}
+      {/* Logout Button */}
       <div className="p-4 border-t border-gray-200">
         <button
           onClick={handleLogout}

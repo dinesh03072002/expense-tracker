@@ -1,0 +1,16 @@
+name: Keep Database Awake
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-database:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send keep-alive request
+        run: |
+          echo "🏓 Pinging database at $(date)"
+          curl -s https://expense-tracker-okxp.onrender.com/api/keep-alive
+          echo "✅ Ping completed"
